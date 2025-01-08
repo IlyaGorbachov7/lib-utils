@@ -19,12 +19,12 @@ by\gorbachevid\perse\resbndl\resolver\RegexResolverToString.class
 by\gorbachevid\perse\resbndl\resolver\ResolverToBoolean$Builder.class
 by\gorbachevid\perse\resbndl\resolver\RegexResolverToString$Builder.class
 by\gorbachevid\perse\resbndl\resolver\Resolver.class
-by\gorbachevid\perse\resbndl\resolver\SplitResolverToArrayString$Builder.class
 by\gorbachevid\perse\resbndl\resolver\ResolverToArrayInt.class
+by\gorbachevid\perse\resbndl\resolver\SplitResolverToArrayString$Builder.class
 by\gorbachevid\perse\resbndl\Writable.class
 by\gorbachevid\perse\resbndl\impl\PropertiesWritableManager.class
-by\gorbachevid\perse\resbndl\resolver\ResolverToArrayBoolean.class
 by\gorbachevid\perse\resbndl\resolver\ResolverToArrayBoolean$Builder.class
+by\gorbachevid\perse\resbndl\resolver\ResolverToArrayBoolean.class
 by\gorbachevid\perse\resbndl\resolver\ResolverToLong.class
 by\gorbachevid\perse\resbndl\resolver\ResolverToDouble.class
 by\gorbachevid\perse\resbndl\resolver\ResolverToArrayLong.class
