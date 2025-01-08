@@ -1,0 +1,4 @@
+jdk:
+  - openjdk8
+maven:
+  version: 3.8.1
