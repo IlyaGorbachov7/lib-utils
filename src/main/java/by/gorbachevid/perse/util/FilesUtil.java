@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -371,6 +373,31 @@ public class FilesUtil {
             }
             default -> throw new UnsupportedOperationException();
         }
+    }
+
+    /**
+     * Extract classes of implementation, passed class of interface from external jarFile.
+     *
+     * @param jarFile                          - path to jar file
+     * @param targetInterfaceFromServiceLoader - class of interface, which serves for extract implementation from jar file
+     * @return list class of implementation from jar file
+     * @throws IOException
+     * @throws IllegalArgumentException
+     * @apiNote Extraction realized via {@link ServiceLoader}
+     */
+    public static <T> List<T> extractClassesFromJar(Path jarFile, Class<? extends T> targetInterfaceFromServiceLoader) throws IllegalArgumentException, IOException {
+        if (targetInterfaceFromServiceLoader.isInterface())
+            throw new IllegalArgumentException("targetInterfaceFromServiceLoader should be interface");
+        if (!Files.isReadable(jarFile) || getExtensionWithPoint(jarFile.toString()).isEmpty()) {
+            throw new IllegalArgumentException("Should be jar file : " + jarFile);
+        }
+        URLClassLoader foreignLoader = new URLClassLoader(new URL[]{jarFile.toFile().toURI().toURL()});
+        List<T> result = new ArrayList<>();
+        ServiceLoader<? extends T> serviceLoader = ServiceLoader.load(targetInterfaceFromServiceLoader, foreignLoader);
+        serviceLoader.stream()
+                .filter(provider -> provider.type().getClassLoader() == foreignLoader)
+                .forEach(provider -> result.add(provider.get()));
+        return result;
     }
 
     public enum OS {
