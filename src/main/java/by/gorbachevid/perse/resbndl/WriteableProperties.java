@@ -7,7 +7,7 @@ import java.util.Map;
 public abstract class WriteableProperties extends ReadableProperties implements Writable {
 
     protected void set(String key, String value) {
-        properties.put(key, value);
+        getProperties().put(key, value);
     }
 
     @Override
