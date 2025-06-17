@@ -91,6 +91,18 @@ public class FileUtilTest {
 	}
 
 	@Test
+	public void test7() {
+		String v = properties.getValue("app.env");
+		System.out.println(v);
+	}
+
+	@Test
+	public void test8() {
+		String v = properties.getValue("app.env.def");
+		System.out.println(v);
+	}
+
+	@Test
 	public void testRemoveTest() {
 		Assertions.assertEquals(4, properties.remove(
 				"app.int", "app.str", "app.userhome", "app.str2", "NOFINT KEY"));
