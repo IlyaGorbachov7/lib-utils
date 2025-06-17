@@ -28,4 +28,8 @@ public interface Writable {
     void setValue(String key, Serializable value);
 
     void setValue(String key, Map<String, String> value);
+
+    long remove(String... keys);
+
+    void clear();
 }

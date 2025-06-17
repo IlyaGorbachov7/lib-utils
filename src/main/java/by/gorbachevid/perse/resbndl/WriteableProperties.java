@@ -1,6 +1,7 @@
 package by.gorbachevid.perse.resbndl;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 
 public abstract class WriteableProperties extends ReadableProperties implements Writable {
@@ -67,5 +68,16 @@ public abstract class WriteableProperties extends ReadableProperties implements 
     @Override
     public void setValue(String key, Map<String, String> value) {
         set(key, resolverMap.assembleToString(value));
+    }
+
+    @Override
+    public long remove(String... keys) {
+        return Arrays.stream(keys).filter((key)-> getProperties().containsKey(key))
+                .peek(key -> getProperties().remove(key)).count();
+    }
+
+    @Override
+    public void clear() {
+        getProperties().clear();
     }
 }

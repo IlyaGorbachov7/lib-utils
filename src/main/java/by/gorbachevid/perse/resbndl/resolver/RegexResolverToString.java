@@ -86,10 +86,14 @@ public class RegexResolverToString implements Resolver<String> {
                 }
             }
             if(v == null && elseK != null) { // if exist override expression then try to find key again by override key
-                v = assemble("${" + elseK+ "}");
+                String finder = "${" + elseK+ "}";
+                v = assemble(finder);
+                if(v.equals(finder)) {
+                    v = elseK;
+                }
             }
             if (v != null) {
-                if(elseK == null) { // if exist override expression then cancel this operation
+                if(elseK == null) { // if exist override expression (elseK) then cancel this operation
                     v = assemble(v); // This code solves the problem of nesting properties
                 }
                 int indexStart = matcher.start();
