@@ -51,7 +51,12 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)  // NoArgsConstructor = PUBLIC is very necessary
 public class RegexResolverToString implements Resolver<String> {
 
-    protected String regex = "[&$]\\{\\s*(sys\\s*:\\s*)?\\s*(.+?)\\s*}";
+    protected String regex = "[&$]\\{\\s*(sys\\s*:\\s*)?\\s*(.+?)\\s*}"; // old regex
+
+    {
+        // update regex. new regex
+        regex = "[&$]\\{\\s*(sys\\s*:\\s*)?(.+?)\\s*((::)\\s*(.+?))?\\s*}";
+    }
 
     @Setter // also need because if RegexResolverToString.properties == null, then this field should be initialized
     protected ReadableProperties properties;
@@ -68,6 +73,7 @@ public class RegexResolverToString implements Resolver<String> {
         while (matcher.find()) {
             String sysProp = matcher.group(1);
             String k = matcher.group(2);
+            String elseK = matcher.group(5);
             String v = null;
             if (sysProp != null) {
                 v = System.getProperty(k);
@@ -75,9 +81,17 @@ public class RegexResolverToString implements Resolver<String> {
                 Object obj = getProperties().getProperties().getOrDefault(k, null);
                 v = ((Objects.nonNull(obj)) ? ((obj instanceof String) ?
                         (String) obj : obj.toString()) : null);
+                if(v == null) { // try to find key in ENVIRONMENT VAR
+                    v = System.getenv(k);
+                }
+            }
+            if(v == null && elseK != null) { // if exist override expression then try to find key again by override key
+                v = assemble("${" + elseK+ "}");
             }
             if (v != null) {
-                v = assemble(v); // This code solves the problem of nesting properties
+                if(elseK == null) { // if exist override expression then cancel this operation
+                    v = assemble(v); // This code solves the problem of nesting properties
+                }
                 int indexStart = matcher.start();
                 int indexEnd = matcher.end();
                 String replaceKeyInstruction = value.substring(indexStart, indexEnd);
