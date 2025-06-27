@@ -20,7 +20,7 @@ public class PropertiesManagerBase extends PropertiesWritableManager {
         return new Builder();
     }
 
-    @Override
+    @Overridesdf
     protected void initResolvers() {
         // Removed base realization/logic of the initialization field of resolvers
         // Now when instance is created that everything resolver is NULL
