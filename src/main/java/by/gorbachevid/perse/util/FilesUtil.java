@@ -339,9 +339,9 @@ public class FilesUtil {
      * <p>
      * #{@linkplain Class#getResource(String)} -- method return string of path where started with "file:" or "jar:"
      */
-    public static boolean isRunningFromJar() {
-        String fileClazz = FilesUtil.class.getName().replace('.', '/');
-        String clazzJar = FilesUtil.class.getResource("/" + fileClazz + ".class").toString();
+    public static boolean isRunningFromJar(Class<?> mainClass) {
+        String fileClazz = mainClass.getName().replace('.', '/');
+        String clazzJar = mainClass.getResource("/" + fileClazz + ".class").toString();
         return clazzJar.startsWith("jar:");
     }
 
