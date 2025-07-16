@@ -6,8 +6,8 @@ import lombok.NonNull;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public class FilesUtil {
      * This separator used always for ZIP or JAR path of files
      */
     public static final String ARCHIVE_SEPARATOR = "/";
-    
+
     public static final String PROPERTIES_EXCEPTION = ".properties";
 
     /**
@@ -128,6 +128,53 @@ public class FilesUtil {
         }
     }
 
+	/**
+	 * Implements recursive deletion of a file or directory with contents.
+	 * Use Files.walkFileTree to go through all the files and folders
+	 * inside the specified path, deleting them as you crawl.
+	 *
+	 * @param path - suggested is directory
+	 * @return don't deleted files or dirs
+	 * @throws IOException - The path does not exist (although you check it in advance).
+	 *                     There are no access rights to files or folders.
+	 *                     The file or folder was deleted or moved during the crawl.
+	 *                     Some kind of system error has occurred. Exceptions inside handler methods:
+	 *                     In your code, you catch and ignore all IOExceptions inside the methods (try-catch).
+	 *                     Therefore, they are not pushed outside and do not cause exceptions from the method.
+	 */
+    public List<Path> deleteIfExist(Path path) throws IOException {
+        if (!Files.exists(path)) return List.of();
+        List<Path> notDeletedPaths = new ArrayList<>();
+        Files.walkFileTree(path, new SimpleFileVisitor<>() {
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				try {
+					Files.deleteIfExists(file);
+				} catch (IOException ignored) {
+					//  (например, файл занят другим процессом или недостаточно прав
+					notDeletedPaths.add(file);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+				try {
+					Files.deleteIfExists(dir); // try delete dir
+				} catch (IOException ignored) {
+					//  (например, директория занята другим процессом или недостаточно прав
+					notDeletedPaths.add(dir);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+				return FileVisitResult.CONTINUE;
+			}
+		});
+        return notDeletedPaths;
+    }
     /**
      * image.jpg,    => .ipg
      * <p>
