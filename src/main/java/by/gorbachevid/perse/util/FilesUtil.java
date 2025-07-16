@@ -142,7 +142,7 @@ public class FilesUtil {
 	 *                     In your code, you catch and ignore all IOExceptions inside the methods (try-catch).
 	 *                     Therefore, they are not pushed outside and do not cause exceptions from the method.
 	 */
-    public List<Path> deleteIfExist(Path path) throws IOException {
+    public static List<Path> deleteIfExist(Path path) throws IOException {
         if (!Files.exists(path)) return List.of();
         List<Path> notDeletedPaths = new ArrayList<>();
         Files.walkFileTree(path, new SimpleFileVisitor<>() {
