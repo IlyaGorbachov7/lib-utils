@@ -7,8 +7,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class PropertiesManagerBase extends PropertiesWritableManager {
 
@@ -165,8 +167,13 @@ public class PropertiesManagerBase extends PropertiesWritableManager {
             }
         }
 
-        public PropertiesManagerBase build(Properties propDefault) {
-            Properties prop = new Properties(propDefault);
+        public PropertiesManagerBase build(Properties prop) {
+            return combine(prop);
+        }
+
+        public PropertiesManagerBase buildClone(Properties propSource) {
+            Properties prop = new Properties();
+            prop.putAll(propSource.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
             return combine(prop);
         }
 
