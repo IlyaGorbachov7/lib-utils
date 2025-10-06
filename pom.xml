@@ -61,6 +61,11 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>bntu.fitr.gorbachev</groupId>
+      <artifactId>ConstructorTickets</artifactId>
+      <version>3.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
