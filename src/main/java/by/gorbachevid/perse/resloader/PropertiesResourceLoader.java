@@ -19,7 +19,7 @@ public class PropertiesResourceLoader {
 	@Getter
 	private ClassLoader classLoader;
 
-	public PropertiesResourceLoader() {
+	protected PropertiesResourceLoader() {
 	}
 
 
