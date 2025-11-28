@@ -74,7 +74,7 @@ public class PropertiesResourceLoader {
 			return new StrategyLoad() {
 				@Override
 				public void defineOrderLoading(List<URL> resources) {
-
+					Collections.reverse(resources);
 				}
 			};
 		}
